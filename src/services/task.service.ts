@@ -1,6 +1,8 @@
 import { tasks } from '../data/tasks.js';
 import type { Task } from '../models/task.js';
 export const listTasks = (): readonly Task[] => tasks;
+export const listPendingTasks = (): readonly Task[] =>
+ tasks.filter((task) => task.status === 'pending');
 export const findTaskById = (id: number): Task | undefined =>
  tasks.find((task) => task.id === id);
 export const createTask = (title: string): Task => {
@@ -25,4 +27,12 @@ export const completeTask = (id: number): Task => {
  }
  task.status = 'completed';
  return task;
+};
+export const deleteTask = (id: number): Task => {
+ const index = tasks.findIndex((task) => task.id === id);
+ if (index === -1) {
+ throw new Error(`No existe una tarea con el id ${id}.`);
+ }
+ const [deletedTask] = tasks.splice(index, 1);
+    return deletedTask!;
 };
